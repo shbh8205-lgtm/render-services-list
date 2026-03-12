@@ -5,6 +5,10 @@ const app = express();
 // משתנה הסביבה שהגדרנו ב-Render
 const RENDER_API_KEY = process.env.RENDER_API_KEY;
 
+app.get('/', (req, res) => {
+    res.redirect('/apps');
+});
+
 app.get('/apps', async (req, res) => {
     try {
         const response = await axios.get('https://api.render.com/v1/services', {
@@ -18,9 +22,9 @@ app.get('/apps', async (req, res) => {
         res.json(response.data);
     } catch (error) {
         console.error('Error fetching services:', error.message);
-        res.status(500).json({ 
+        res.status(500).json({
             error: 'Failed to fetch services from Render',
-            details: error.response ? error.response.data : error.message 
+            details: error.response ? error.response.data : error.message
         });
     }
 });
