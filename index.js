@@ -5,20 +5,16 @@ const app = express();
 // משתנה הסביבה שהגדרנו ב-Render
 const RENDER_API_KEY = process.env.RENDER_API_KEY;
 
-app.get('/', (req, res) => {
-    res.redirect('/apps');
-});
-
-app.get('/apps', async (req, res) => {
+// שימוש במערך של נתיבים כדי שגם הדף הראשי יעבוד
+app.get(['/', '/apps'], async (req, res) => {
     try {
         const response = await axios.get('https://api.render.com/v1/services', {
             headers: {
-                'Authorization': `Bearer ${RENDER_API_KEY}`,
+                'Authorization': `Bearer ${process.env.RENDER_API_KEY}`,
                 'Accept': 'application/json'
             }
         });
 
-        // מחזיר את רשימת האפליקציות כפי שהן מגיעות מ-Render
         res.json(response.data);
     } catch (error) {
         console.error('Error fetching services:', error.message);
